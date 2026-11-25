@@ -1,18 +1,18 @@
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix mo:      <http://purl.org/ontology/mo/> .
-# gotta use the namespace that we register on w3id.org
-@prefix ex:      <https://w3id.org/spotify-tracks/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix mo:   <http://purl.org/ontology/mo/> .
+@prefix ex:   <https://w3id.org/spotify-tracks/terms/> .
 
-<https://w3id.org/spotify-tracks/terms>
-    a owl:Ontology ;
-    dcterms:title "Spotify Tracks vocabulary"@en ;
-    dcterms:description "Locally minted datatype properties for Spotify-reported track features, used by the Spotify Tracks LDAP."@en ;
-    dcterms:creator "DP Neves" .
+# ontologies, not directly used in shapes file
 
 # minted vocabulary terms (only needed for Track)
+ex:spotifyGenre a owl:DatatypeProperty ;
+    rdfs:label "Spotify genre label"@en ;
+    rdfs:comment "Genre label assigned to a track in the source dataset, preserved as a string. A track may have several genre labels. The labels are not claimed to form an official Spotify genre taxonomy."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:string .
+
 ex:spotifyPopularity a owl:DatatypeProperty ;
     rdfs:label "Spotify popularity score"@en ;
     rdfs:comment "Spotify-reported track popularity score, expressed as an integer from 0 to 100. The value is preserved from the source dataset and is not a measure of musical quality."@en ;
