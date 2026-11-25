@@ -1,0 +1,238 @@
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix mo:      <http://purl.org/ontology/mo/> .
+# gotta use the namespace that we register on w3id.org
+@prefix ex:      <https://w3id.org/spotify-tracks/terms/> .
+@prefix shapes:  <https://w3id.org/spotify-tracks/shapes/> .
+
+<https://w3id.org/spotify-tracks/shapes>
+    a owl:Ontology ;
+    dcterms:title "SHACL shapes for the Spotify Tracks Linked Data Application Profile"@en ;
+    dcterms:description "Machine-checkable version of the constraints matrix of the Spotify Tracks LDAP."@en ;
+    dcterms:creator "Diogo Neves" .
+
+# Track  (mo:Track)
+shapes:TrackShape
+    a sh:NodeShape ;
+    sh:targetClass mo:Track ;
+    sh:nodeKind sh:IRI ;
+
+    # properties where existing ontologies can be used
+    sh:property [   # ID
+        sh:path dcterms:identifier ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[A-Za-z0-9]{22}$" ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track needs exactly one Spotify identifier (22 alphanumeric characters)." ;
+    ] ;
+    sh:property [   # song title
+        sh:path dcterms:title ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:maxCount 1 ;
+        sh:message "A track has at most one non-empty title (a title may be missing in the source)." ;
+    ] ;
+    sh:property [   # song artist (dcterms:contributor: mo:performer's domain is mo:Performance, not mo:Track)
+        sh:path dcterms:contributor ;
+        sh:class mo:MusicArtist ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:message "A track needs at least one credited artist, as an IRI of mo:MusicArtist (expected exception: track 1kR4gIb7nGxHPI3D2ifs59, which has no artist, album or title in the source)." ;
+    ] ;
+    sh:property [   # release
+        sh:path dcterms:isPartOf ;
+        sh:class mo:Release ;
+        sh:nodeKind sh:IRI ;
+        sh:maxCount 1 ;
+        sh:message "A track belongs to at most one release (IRI of mo:Release)." ;
+    ] ;
+    sh:property [   # genre
+        sh:path mo:genre ;
+        sh:class mo:Genre ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:message "A track needs at least one genre (IRI of mo:Genre from the dataset scheme)." ;
+    ] ;
+    sh:property [   # duration
+        sh:path mo:duration ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track needs exactly one duration in milliseconds (xsd:float, >= 0)." ;
+    ] ;
+
+    # properties for spotify's own audio feature scores
+    sh:property [   # danceability
+        sh:path ex:spotifyDanceability ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify danceability score in [0,1]." ;
+    ] ;
+    sh:property [   # energy
+        sh:path ex:spotifyEnergy ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify energy score in [0,1]." ;
+    ] ;
+    sh:property [   # acousticness
+        sh:path ex:spotifyAcousticness ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify acousticness score in [0,1]." ;
+    ] ;
+    sh:property [   # instrumentalness
+        sh:path ex:spotifyInstrumentalness ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify instrumentalness score in [0,1]." ;
+    ] ;
+    sh:property [   # liveness
+        sh:path ex:spotifyLiveness ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify liveness score in [0,1]." ;
+    ] ;
+    sh:property [   # speechiness
+        sh:path ex:spotifySpeechiness ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify speechiness score in [0,1]." ;
+    ] ;
+    sh:property [   # valence
+        sh:path ex:spotifyValence ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ; sh:maxInclusive 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A track must have exactly one Spotify valence score in [0,1]." ;
+    ] ;
+
+    # the rest of the features, also minting since there are no ontologies for them
+    sh:property [   # popularity
+        sh:path ex:spotifyPopularity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ; sh:maxInclusive 100 ;
+        sh:minCount 1 ;
+        sh:message "Popularity must be an integer in 0..100 (at least one value; the source may report different values per genre row)." ;
+    ] ;
+    sh:property [   # explicit
+        sh:path ex:spotifyExplicit ;
+        sh:datatype xsd:boolean ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Explicit flag must be exactly one xsd:boolean (false may also mean unknown)." ;
+    ] ;
+    sh:property [   # bpm
+        sh:path ex:tempoBpm ;
+        sh:datatype xsd:decimal ;
+        sh:minInclusive 0 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Tempo must be exactly one xsd:decimal >= 0 (BPM) (expected exception: track 75Ak0cit8hV604Wjlq1gf2, reported with two different tempos in the source)." ;
+    ] ;
+    sh:property [   # loudness
+        sh:path ex:spotifyLoudnessDb ;
+        sh:datatype xsd:decimal ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Loudness must be exactly one xsd:decimal in dB (may be positive)." ;
+    ] ;
+    sh:property [   # song key
+        sh:path ex:keyCode ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive -1 ; sh:maxInclusive 11 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Key code must be exactly one integer in -1..11 (-1 = undetected)." ;
+    ] ;
+    sh:property [   # song mode
+        sh:path ex:modeCode ;
+        sh:datatype xsd:integer ;
+        sh:in ( 0 1 ) ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Mode code must be exactly one integer: 0 (minor) or 1 (major)." ;
+    ] ;
+    sh:property [   # time signature
+        sh:path ex:timeSignatureCode ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ; sh:maxInclusive 7 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Time-signature code must be exactly one integer in 0..7 (the source also contains the anomalous codes 0 and 1)." ;
+    ] .
+
+# Artist  (mo:MusicArtist)
+shapes:ArtistShape
+    a sh:NodeShape ;
+    sh:targetClass mo:MusicArtist ;
+    sh:nodeKind sh:IRI ;
+    sh:property [
+        sh:path foaf:name ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An artist needs exactly one non-empty foaf:name." ;
+    ] ;
+    sh:property [   # link to external data (5th star)
+        sh:path owl:sameAs ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Links from an artist to external entities (e.g. Wikidata) must be IRIs." ;
+    ] .
+
+# Release  (mo:Release)
+shapes:ReleaseShape
+    a sh:NodeShape ;
+    sh:targetClass mo:Release ;
+    sh:nodeKind sh:IRI ;
+    sh:property [
+        sh:path dcterms:title ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A release needs exactly one non-empty dcterms:title." ;
+    ] .
+
+# Genre  (mo:Genre + skos:Concept)
+shapes:GenreShape
+    a sh:NodeShape ;
+    sh:targetClass mo:Genre ;
+    sh:nodeKind sh:IRI ;
+    sh:class skos:Concept ;
+    sh:message "A genre must also be typed as skos:Concept." ;
+    sh:property [
+        sh:path skos:prefLabel ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A genre needs exactly one non-empty skos:prefLabel (the source genre label)." ;
+    ] ;
+    sh:property [
+        sh:path skos:inScheme ;
+        sh:hasValue <https://w3id.org/spotify-tracks/genres> ;
+        sh:class skos:ConceptScheme ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A genre must belong to exactly one scheme: the dataset genre scheme." ;
+    ] ;
+    sh:property [   # link to external data (5th star)
+        sh:path skos:exactMatch ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Links from a genre to external concepts (e.g. Wikidata) must be IRIs." ;
+    ] .
+
+# Genre scheme  (skos:ConceptScheme)
+shapes:GenreSchemeShape
+    a sh:NodeShape ;
+    sh:targetClass skos:ConceptScheme ;
+    sh:nodeKind sh:IRI ;
+    sh:property [
+        sh:path dcterms:title ;
+        sh:minCount 1 ;
+        sh:message "The genre scheme needs a dcterms:title." ;
+    ] .

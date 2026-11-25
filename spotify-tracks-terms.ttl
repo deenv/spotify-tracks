@@ -1,0 +1,98 @@
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix mo:      <http://purl.org/ontology/mo/> .
+# gotta use the namespace that we register on w3id.org
+@prefix ex:      <https://w3id.org/spotify-tracks/terms/> .
+
+<https://w3id.org/spotify-tracks/terms>
+    a owl:Ontology ;
+    dcterms:title "Spotify Tracks vocabulary"@en ;
+    dcterms:description "Locally minted datatype properties for Spotify-reported track features, used by the Spotify Tracks LDAP."@en ;
+    dcterms:creator "DP Neves" .
+
+# minted vocabulary terms (only needed for Track)
+ex:spotifyPopularity a owl:DatatypeProperty ;
+    rdfs:label "Spotify popularity score"@en ;
+    rdfs:comment "Spotify-reported track popularity score, expressed as an integer from 0 to 100. The value is preserved from the source dataset and is not a measure of musical quality."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:integer .
+
+ex:spotifyExplicit a owl:DatatypeProperty ;
+    rdfs:label "Spotify explicit-content flag"@en ;
+    rdfs:comment "Explicit-content flag reported in the source dataset. A true value indicates explicit content; false may represent either non-explicit content or an unknown status."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:boolean .
+
+ex:spotifyDanceability a owl:DatatypeProperty ;
+    rdfs:label "Spotify danceability score"@en ;
+    rdfs:comment "Spotify-reported estimate of how suitable a track is for dancing, expressed as a decimal from 0 to 1. Higher values indicate greater estimated danceability."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyEnergy a owl:DatatypeProperty ;
+    rdfs:label "Spotify energy score"@en ;
+    rdfs:comment "Spotify-reported estimate of a track's perceived intensity and activity, expressed as a decimal from 0 to 1. This is not a physical energy measurement."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyAcousticness a owl:DatatypeProperty ;
+    rdfs:label "Spotify acousticness score"@en ;
+    rdfs:comment "Spotify-reported confidence that a track is acoustic, expressed as a decimal from 0 to 1. Higher values indicate greater confidence in acoustic character."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyInstrumentalness a owl:DatatypeProperty ;
+    rdfs:label "Spotify instrumentalness score"@en ;
+    rdfs:comment "Spotify-reported prediction of whether a track contains no vocals, expressed as a decimal from 0 to 1. Higher values indicate a greater likelihood of instrumental content."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyLiveness a owl:DatatypeProperty ;
+    rdfs:label "Spotify liveness score"@en ;
+    rdfs:comment "Spotify-reported estimate based on the presence of an audience in the recording, expressed as a decimal from 0 to 1. Higher values indicate a greater likelihood of a live recording."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifySpeechiness a owl:DatatypeProperty ;
+    rdfs:label "Spotify speechiness score"@en ;
+    rdfs:comment "Spotify-reported estimate of spoken-word presence in a track, expressed as a decimal from 0 to 1. Higher values indicate more speech-like content."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyValence a owl:DatatypeProperty ;
+    rdfs:label "Spotify valence score"@en ;
+    rdfs:comment "Spotify-reported estimate of the musical positivity conveyed by a track, expressed as a decimal from 0 to 1. It does not establish the emotional response of an individual listener."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:tempoBpm a owl:DatatypeProperty ;
+    rdfs:label "Spotify estimated tempo in BPM"@en ;
+    rdfs:comment "Spotify-reported estimated overall tempo of a track, expressed in beats per minute and preserved from the source dataset."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:spotifyLoudnessDb a owl:DatatypeProperty ;
+    rdfs:label "Spotify overall loudness in dB"@en ;
+    rdfs:comment "Spotify-reported overall loudness of a track, expressed in decibels and preserved from the source dataset."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:decimal .
+
+ex:keyCode a owl:DatatypeProperty ;
+    rdfs:label "Spotify key code"@en ;
+    rdfs:comment "Spotify-reported estimated pitch-class code: 0 = C, 1 = C-sharp/D-flat, 2 = D, 3 = D-sharp/E-flat, 4 = E, 5 = F, 6 = F-sharp/G-flat, 7 = G, 8 = G-sharp/A-flat, 9 = A, 10 = A-sharp/B-flat, and 11 = B. A value of -1 indicates that no key was detected."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:integer .
+
+ex:modeCode a owl:DatatypeProperty ;
+    rdfs:label "Spotify mode code"@en ;
+    rdfs:comment "Spotify-reported estimated modality code: 0 indicates minor and 1 indicates major."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:integer .
+
+ex:timeSignatureCode a owl:DatatypeProperty ;
+    rdfs:label "Spotify time-signature code"@en ;
+    rdfs:comment "Spotify-reported estimated time-signature integer, preserved from the source dataset. This property retains the source encoding rather than asserting a complete notated musical meter."@en ;
+    rdfs:domain mo:Track ;
+    rdfs:range xsd:integer .
